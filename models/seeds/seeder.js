@@ -1,16 +1,8 @@
-// set mongodb connection
-const mongoose = require('mongoose')
-const Restaurant = require('../restaurant')   // load restaurant model
-mongoose.connect('mongodb://localhost/restaurant-list')
-const db = mongoose.connection
+// require mongodb connection
+const db = require('../../config/mongoose')
 
-// get restaurant seeder json
-const restaurantSeeder = require('../../restaurant.json')
-
-// if mongodb connection error
-db.on('error', () => {
-  console.log('mongodb error!')
-})
+// require Restaurant model
+const Restaurant = require('../restaurant')
 
 // once mongodb connected
 db.once('open', () => {

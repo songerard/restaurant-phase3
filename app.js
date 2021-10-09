@@ -18,6 +18,9 @@ db.once('open', () => {
 // load restaurant model
 const Restaurant = require('./models/restaurant')
 
+// require method-override
+const methodOverride = require('method-override')
+app.use(methodOverride('_method'))
 
 // set express-handlebars as view engine
 const exphbs = require('express-handlebars')
@@ -164,7 +167,7 @@ app.get('/restaurants/:id/edit', (req, res) => {
     .catch(error => console.error(error))
 })
 
-app.post('/restaurants/:id/edit', (req, res) => {
+app.put('/restaurants/:id', (req, res) => {
   const id = req.params.id
   Restaurant.findById(id)
     .then(restaurant => {
@@ -178,7 +181,7 @@ app.post('/restaurants/:id/edit', (req, res) => {
 })
 
 // delete restaurant
-app.post('/restaurants/:id/delete', (req, res) => {
+app.delete('/restaurants/:id', (req, res) => {
   Restaurant.findById(req.params.id)
     .then(restaurant => restaurant.remove())
     .then(() => res.redirect('/'))

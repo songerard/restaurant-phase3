@@ -10,7 +10,7 @@ allDeleteBtn.forEach(btn => btn.addEventListener('click', (event) => {
   const modalBody = document.querySelector('.modal-body')
   const deleteForm = document.querySelector('.delete-form')
   modalBody.innerHTML = modalHTML
-  deleteForm.action = `/restaurants/${id}/delete`
+  deleteForm.action = `/restaurants/${id}?_method=DELETE`
 }))
 
 

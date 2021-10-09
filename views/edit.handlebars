@@ -1,6 +1,6 @@
 <div class="container mt-3">
   <h2 class="my-3">更新餐廳資料</h2>
-  <form action="/restaurants/{{ restaurant._id }}/edit" method="POST" class="needs-validation" novalidate>
+  <form action="/restaurants/{{ restaurant._id }}?_method=PUT" method="POST" class="needs-validation" novalidate>
     <div class="form-group row">
       <label for="name" class="col-sm-3 col-form-label">中文文名稱</label>
       <div class="col-sm-9">

@@ -10,11 +10,15 @@
           <div class="input-group-append">
             <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
           </div>
-          <a href="/restaurants/new" class="btn btn btn-success ml-4">添加新餐廳</a>
-        </div>
       </form>
+      <a href="/restaurants/new" class="btn btn-success ml-4">添加新餐廳</a>
+      <button type="button" class="btn btn-primary ml-4 show-sorting-form-btn" onclick="showSortingForm()">餐廳排序</button>
     </div>
+    <form class="mt-4 sorting-form" action="/sort">
+      <!-- sorting form render by js -->
+    </form>
   </div>
+</div>
 </div>
 
 <!-- Alert when search result is empty -->
@@ -92,3 +96,4 @@
 </div>
 
 <script src="/javascripts/modal.js"></script>
+<script src="/javascripts/form.js"></script>

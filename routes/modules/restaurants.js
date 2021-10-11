@@ -18,11 +18,22 @@ hbs.handlebars.registerHelper('if_eq', function (a, options) {
 })
 
 // set route
+
 // new restaurant page
 router.get('/new', (req, res) => {
+  let allCategory = []
   Restaurant.find()
     .lean()
-    .then(res.render('new', { allCategory }))
+    .then(restaurants => {
+      restaurants.forEach(r => {
+        // if category not found in allCategory, then add in allCategory
+        if (allCategory.indexOf(r.category) === -1) {
+          allCategory.push(r.category)
+        }
+      })
+      allCategory.sort
+      res.render('new', { allCategory })
+    })
     .catch(error => console.error(error))
 })
 
@@ -68,9 +79,23 @@ router.get('/:id', (req, res) => {
 
 // edit restaurant page
 router.get('/:id/edit', (req, res) => {
+  let allCategory = []
+  Restaurant.find()
+    .lean()
+    .then(restaurants => {
+      restaurants.forEach(r => {
+        // if category not found in allCategory, then add in allCategory
+        if (allCategory.indexOf(r.category) === -1) {
+          allCategory.push(r.category)
+        }
+      })
+      allCategory.sort
+    })
+    .catch(error => console.error(error))
   Restaurant.findById(req.params.id)
     .lean()
     .then(restaurant => {
+      // render edit page and set restaurant's current category as default
       selectedRestaurantCategory = restaurant.category
       res.render('edit', { restaurant, allCategory })
     })
@@ -98,13 +123,5 @@ router.delete('/:id', (req, res) => {
     .then(() => res.redirect('/'))
     .catch(error => console.error(error))
 })
-
-
-
-
-
-
-
-
 
 module.exports = router

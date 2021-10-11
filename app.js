@@ -32,9 +32,6 @@ app.listen(port, () => {
   console.log(`Express is listening to http://localhost:${port}`)
 })
 
-// set common variable
-let allCategory = []
-
 // Use router
 const routes = require('./routes')
 app.use(routes)

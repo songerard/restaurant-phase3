@@ -12,17 +12,7 @@ router.get('/', (req, res) => {
   Restaurant.find()
     .lean()
     .sort({ 'rating': 'desc', 'name': 'asc' })
-    .then(restaurants => {
-      allCategory = []      // clear allCategory list
-      restaurants.forEach(r => {
-        // if category not found in allCategory, then add in allCategory
-        if (allCategory.indexOf(r.category) === -1) {
-          allCategory.push(r.category)
-        }
-      })
-      allCategory.sort
-      res.render('index', { restaurants })
-    })
+    .then(restaurants => res.render('index', { restaurants }))
     .catch(error => console.error(error))
 })
 
@@ -49,6 +39,7 @@ router.get('/search', (req, res) => {
     .lean()
     .sort({ 'rating': 'desc', 'name': 'asc' })
     .then(filteredRestaurants => {
+
       // if no restaurant found, then set alert = true and show all restaurants
       const searchAlert = (!filteredRestaurants.length || !keyword) ? true : false
       const restaurants = (filteredRestaurants.length) ? filteredRestaurants : allRestaurants
@@ -90,17 +81,7 @@ router.get('/sort', (req, res) => {
   Restaurant.find()
     .lean()
     .sort(selectedSortingOptions)
-    .then(restaurants => {
-      allCategory = []      // clear allCategory list
-      restaurants.forEach(r => {
-        // if category not found in allCategory, then add in allCategory
-        if (allCategory.indexOf(r.category) === -1) {
-          allCategory.push(r.category)
-        }
-      })
-      allCategory.sort
-      res.render('index', { restaurants })
-    })
+    .then(restaurants => res.render('index', { restaurants }))
     .catch(error => console.error(error))
 
 })

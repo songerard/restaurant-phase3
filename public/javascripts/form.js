@@ -1,3 +1,5 @@
+// ******* Validation ******* //
+
 // disabling form submissions if there are invalid fields
 (function () {
   'use strict';
@@ -16,6 +18,8 @@
     });
   }, false);
 })();
+
+// ******* Edit page and New page ******* //
 
 // show and hide input form for other category
 function categoryForm(selectedCategory) {
@@ -62,9 +66,10 @@ function showRating(rating) {
   }
 }
 
-// ******** sort function ******** //
+// ******** Index page Sort function ******** //
 
 function showSortingForm() {
+  // select sorting form and button
   const sortingForm = document.querySelector('.sorting-form')
   const showSortingFormBtn = document.querySelector('.show-sorting-form-btn')
 
@@ -78,7 +83,7 @@ function showSortingForm() {
     <div class="form-row align-items-center">
       <div class="form-group col-md-3">
         <label for="sort1">第一排序</label>
-        <select id="sort1" name="sort1" class="form-control" onchange="showSortingOptions()">
+        <select id="sort1" name="sort1" class="form-control sort-field" onchange="showSortingOptions(this.name)">
           <option selected disabled value="">請選擇...</option>
           <option value="rd">評分(高至低)</option>
           <option value="ra">評分(低至高)</option>
@@ -90,18 +95,36 @@ function showSortingForm() {
       </div>
       <div class="form-group col-md-3">
         <label for="sort2">第二排序</label>
-        <select id="sort2" name="sort2" class="form-control" onchange="showSortingOptions()">
+        <select id="sort2" name="sort2" class="form-control sort-field" onchange="showSortingOptions(this.name)">
         </select>
       </div>
       <div class="form-group col-md-3">
         <label for="sort3">第三排序</label>
-        <select id="sort3" name="sort3" class="form-control">
+        <select id="sort3" name="sort3" class="form-control sort-field">
         </select>
       </div>
       <button type="submit" class="btn btn-secondary col-md-2 mt-3 mx-2" style="height: 38px">排序</button>
     </div>
     `
   sortingForm.innerHTML = sortingFormHTML
+
+  // ******* show sorting query in sorting field ******* //
+
+  // select sorting field
+  const sortingFields = document.querySelectorAll('.sort-field')
+
+  // get sorting query
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const sortingQuery = []
+  for (let i = 1; i <= sortingFields.length; i++) {
+    sortingQuery.push(urlSearchParams.get('sort' + i))
+  }
+
+  // assign sorting query to sorting field
+  for (let q = 0; q < sortingQuery.length; q++) {
+    sortingFields[q].value = sortingQuery[q]
+    if (q < sortingQuery.length - 1) showSortingOptions(sortingFields[q].name)
+  }
 }
 
 function hideSortingForm() {
@@ -115,7 +138,7 @@ function hideSortingForm() {
   sortingForm.innerHTML = ''
 }
 
-function showSortingOptions() {
+function showSortingOptions(name) {
   // sorting options
   const formOptions = [
     ['rating_desc', 'r', 'rd', '評分(高至低)'],
@@ -131,7 +154,7 @@ function showSortingOptions() {
   const sort2 = document.querySelector('#sort2')
   const sort3 = document.querySelector('#sort3')
   const sort1Value = sort1.value
-  const sort2Value = sort2.value
+  const sort2Value = (name === 'sort1') ? '' : sort2.value
 
   // check next sorting priority and options
   let sortHTML = '<option selected disabled value="">請選擇...</option>'
@@ -149,5 +172,6 @@ function showSortingOptions() {
       }
     })
     sort2.innerHTML = sortHTML
+    sort3.innerHTML = ''
   }
 }

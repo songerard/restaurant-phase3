@@ -52,9 +52,12 @@ router.get('/search', (req, res) => {
 
 // sort restaurant
 router.get('/sort', (req, res) => {
-  const sort1 = req.query.sort1
-  const sort2 = req.query.sort2
-  const sort3 = req.query.sort3
+  // get sorting query
+  const sortingQuery = [
+    req.query.sort1,
+    req.query.sort2,
+    req.query.sort3
+  ]
 
   // code for sorting options
   const sortingCode = {
@@ -67,15 +70,11 @@ router.get('/sort', (req, res) => {
 
   // selected sorting options
   const selectedSortingOptions = {}
-  if (sort1) {
-    selectedSortingOptions[sortingCode[sort1[0]]] = sortingCode[sort1[1]]
-  }
-  if (sort2) {
-    selectedSortingOptions[sortingCode[sort2[0]]] = sortingCode[sort2[1]]
-  }
-  if (sort3) {
-    selectedSortingOptions[sortingCode[sort3[0]]] = sortingCode[sort3[1]]
-  }
+  sortingQuery.forEach(q => {
+    if (q) {
+      selectedSortingOptions[sortingCode[q[0]]] = sortingCode[q[1]]
+    }
+  })
 
   // sort Restaurant according to selected sorting options
   Restaurant.find()
@@ -83,7 +82,6 @@ router.get('/sort', (req, res) => {
     .sort(selectedSortingOptions)
     .then(restaurants => res.render('index', { restaurants }))
     .catch(error => console.error(error))
-
 })
 
 // export module

@@ -20,15 +20,6 @@ router.get('/', (req, res) => {
 router.get('/search', (req, res) => {
   const keyword = req.query.keyword.trim()
 
-  // get all restaurants from mongodb
-  const allRestaurants = []
-  Restaurant.find()
-    .lean()
-    .sort({ 'rating': 'desc', 'name': 'asc' })
-    .then(restaurants => {
-      allRestaurants.push(...restaurants)
-    })
-
   // filter restaurants by keyword in name or category
   Restaurant.find({
     $or: [
@@ -39,14 +30,26 @@ router.get('/search', (req, res) => {
     .lean()
     .sort({ 'rating': 'desc', 'name': 'asc' })
     .then(filteredRestaurants => {
-
       // if no restaurant found, then set alert = true and show all restaurants
-      const searchAlert = (!filteredRestaurants.length || !keyword) ? true : false
-      const restaurants = (filteredRestaurants.length) ? filteredRestaurants : allRestaurants
-      const showReturnBtn = (!searchAlert) ? true : false
+      if (!filteredRestaurants.length) {
+        // get all restaurants from mongodb
+        Restaurant.find()
+          .lean()
+          .sort({ 'rating': 'desc', 'name': 'asc' })
+          .then(restaurants => {
+            const searchAlert = true
+            const showReturnBtn = false
 
-      // render index page
-      res.render('index', { restaurants, keyword, searchAlert, showReturnBtn })
+            // render index page with searchAlert
+            res.render('index', { restaurants, keyword, searchAlert, showReturnBtn })
+          })
+      } else {
+        // if some restaurant found
+        const searchAlert = false
+        const restaurants = filteredRestaurants
+        const showReturnBtn = true
+        res.render('index', { restaurants, keyword, searchAlert, showReturnBtn })
+      }
     })
     .catch(error => console.error(error))
 })

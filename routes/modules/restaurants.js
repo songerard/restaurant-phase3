@@ -39,32 +39,11 @@ router.get('/new', (req, res) => {
 
 // add new restaurant into mongodb
 router.post('/', (req, res) => {
-  let {
-    name,
-    name_en,
-    category,
-    other_category,
-    image,
-    location,
-    phone,
-    google_map,
-    rating,
-    description
-  } = req.body
+  const restaurant = req.body
+  const { category, other_category } = restaurant
 
-  category = (category === '其他') ? other_category : category
-
-  Restaurant.create({
-    name,
-    name_en,
-    category,
-    image,
-    location,
-    phone,
-    google_map,
-    rating,
-    description
-  })
+  restaurant.category = (category === '其他') ? other_category : category
+  Restaurant.create({ restaurant })
     .then(() => res.redirect('/'))
     .catch(error => console.error(error))
 })
